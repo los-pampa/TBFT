@@ -326,8 +326,8 @@ void lib_start_amd_msr()
 	}
 	uint64_t data;
 	pread(fd, &data, sizeof data, AMD_MSR_PACKAGE_ENERGY);
-	//libKernels[id_actual_region].kernelBefore[0] = read_msr(fd, AMD_MSR_PACKAGE_ENERGY);
 	libKernels[id_actual_region].kernelBefore[0] = (long long)data;
+        close(fd);
 }
 
 double lib_end_amd_msr()
@@ -343,5 +343,6 @@ double lib_end_amd_msr()
 	pread(fd, &data, sizeof data, AMD_MSR_PACKAGE_ENERGY);
 	libKernels[id_actual_region].kernelAfter[0] = (long long)data;
 	double result = (libKernels[id_actual_region].kernelAfter[0] - libKernels[id_actual_region].kernelBefore[0]) * pow(0.5, (float)(energy_unit));
-	return result;
+	close(fd);
+        return result;
 }
